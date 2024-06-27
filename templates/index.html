@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+   <title>Turnero</title>
+</head>
+<body>
+   <div id="main">
+       <button id="doctorAccessBtn">Acceso Doctores</button>
+       <button id="patientAccessBtn">Acceso Pacientes</button>
+       <button id="viewAccessBtn">Visor</button>
+       <button id="doctorLoginBtn">Doctor Login</button>
+   </div>
+
+
+   <div id="doctor-form" class="hidden">
+       <h2>Registro Doctores</h2>
+       <label for="doctorDni">DNI:</label>
+       <input type="text" id="doctorDni">
+       <label for="doctorNombre">Nombre Completo:</label>
+       <input type="text" id="doctorNombre">
+       <label for="doctorEspecialidad">Especialidad:</label>
+       <input type="text" id="doctorEspecialidad">
+       <label for="doctorConsultorio">Consultorio:</label>
+       <input type="text" id="doctorConsultorio">
+       <button id="confirmDoctorBtn">Confirmar</button>
+       <button class="backToHomeBtn">Volver</button>
+   </div>
+
+
+   <div id="patient-form" class="hidden">
+       <h2>Registro Pacientes</h2>
+       <label for="patientDni">DNI:</label>
+       <input type="text" id="patientDni">
+       <label for="patientNombre">Nombre Completo:</label>
+       <input type="text" id="patientNombre">
+       <label for="patientEspecialidad">Especialidad:</label>
+       <select id="patientEspecialidad"></select>
+       <button id="confirmPatientBtn">Confirmar</button>
+       <button class="backToHomeBtn">Volver</button>
+   </div>
+
+
+   <div id="doctor-login" class="hidden">
+       <h2>Doctor Login</h2>
+       <label for="loginDni">DNI:</label>
+       <input type="text" id="loginDni">
+       <button id="doctorLoginSubmit">Login</button>
+       <button class="backToHomeBtn">Volver</button>
+   </div>
+
+
+   <div id="visor" class="hidden">
+       <h2>Turnos Tomados</h2>
+       <table>
+           <thead>
+               <tr>
+                   <th>Nombre del Paciente</th>
+                   <th>Especialidad</th>
+                   <th>Consultorio</th>
+                   <th>Acciones</th>
+               </tr>
+           </thead>
+           <tbody id="turnosTableBody"></tbody>
+       </table>
+       <button id="logoutBtn" class="hidden">Logout</button>
+       <button class="backToHomeBtn">Volver</button>
+   </div>
+
+
+   <div id="visor-general" class="hidden">
+       <h2>Pacientes Llamados</h2>
+       <table>
+           <thead>
+               <tr>
+                   <th>Nombre del Paciente</th>
+                   <th>Especialidad</th>
+                   <th>Consultorio</th>
+               </tr>
+           </thead>
+           <tbody id="visorGeneralBody"></tbody>
+       </table>
+       <button class="backToHomeBtnGeneral">Volver</button>
+   </div>
+   <div id="historyModal" class="modal hidden">
+       <div class="modal-content">
+           <div class="modal-header">
+               <span class="close" id="historyModalClose">&times;</span>
+               <h2>Historial Clínico y Nuevo Diagnóstico</h2>
+           </div>
+           <div class="modal-body">
+               <div class="modal-left">
+                   <h3>Nuevo Diagnóstico</h3>
+                   <textarea id="newDiagnosis" rows="10" cols="30" placeholder="Escriba el nuevo diagnóstico aquí..."></textarea>
+                   <button id="saveDiagnosisBtn">Guardar Diagnóstico</button>
+               </div>
+               <div class="modal-right">
+                   <h3>Historial Clínico</h3>
+                   <div id="clinicalHistory"></div>
+               </div>
+           </div>
+       </div>
+   </div>
+</body>
+</html>
