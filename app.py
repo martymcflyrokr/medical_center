@@ -90,7 +90,7 @@ def add_patient():
         existing_patient.especialidad = especialidad
         existing_patient.en_fila = True  # Asegurar que esté en la fila si se actualiza
         db.session.commit()
-        return jsonify({'status': 'success', 'message': 'Paciente actualizado correctamente'})
+        return jsonify({'status': 'success', 'message': 'Turno registrado'})
     else:
         # Verificar si hay un doctor disponible para la nueva especialidad
         doctor = Doctor.query.filter_by(especialidad=especialidad).first()
