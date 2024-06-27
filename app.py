@@ -21,6 +21,7 @@ class Patient(db.Model):
    especialidad = db.Column(db.String(100), nullable=False)
    consultorio = db.Column(db.Integer, nullable=False)
    called = db.Column(db.Boolean, default=False)
+   en_fila = db.Column(db.Boolean, default=True) 
 
 
 class ClinicalHistory(db.Model):
@@ -29,8 +30,6 @@ class ClinicalHistory(db.Model):
    doctor_dni = db.Column(db.Integer, db.ForeignKey('doctor.dni'), nullable=False)
    diagnosis = db.Column(db.String(500), nullable=False)
    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
-
-
 
 
 with app.app_context():
@@ -87,7 +86,9 @@ def add_patient():
            dni=data['dni'],
            nombre=data['nombre'],
            especialidad=especialidad,
-           consultorio=doctor.consultorio
+           consultorio=doctor.consultorio,
+           en_fila=True  # Inicializa en_fila en True
+
        )
        db.session.add(new_patient)
        db.session.commit()
@@ -122,7 +123,7 @@ def doctor_login():
    dni = data['dni']
    doctor = Doctor.query.filter_by(dni=dni).first()
    if doctor:
-       patients = Patient.query.filter_by(especialidad=doctor.especialidad).all()
+       patients = Patient.query.filter_by(especialidad=doctor.especialidad, en_fila=True).all()
        patients_list = [{'nombre': patient.nombre, 'dni': patient.dni, 'especialidad': patient.especialidad, 'consultorio': patient.consultorio, 'called': patient.called} for patient in patients]
        return jsonify({'status': 'success', 'patients': patients_list})
    else:
@@ -145,6 +146,7 @@ def liberar_paciente(dni):
    patient = Patient.query.filter_by(dni=dni).first()
    if patient:
        patient.called = False
+       patient.en_fila = False
        db.session.commit()
        return jsonify({'status': 'success'})
    else:
