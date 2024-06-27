@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logoutBtn');
     const backToHomeBtn = document.querySelectorAll('.backToHomeBtn');
     const backToHomeBtnGeneral = document.querySelector('.backToHomeBtnGeneral');
- 
- 
     const doctorForm = document.getElementById('doctor-form');
     const patientForm = document.getElementById('patient-form');
     const doctorLoginForm = document.getElementById('doctor-login');
@@ -18,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const newDiagnosis = document.getElementById('newDiagnosis');
     const saveDiagnosisBtn = document.getElementById('saveDiagnosisBtn');
     const clinicalHistory = document.getElementById('clinicalHistory');
+    const searchPatientBtn = document.getElementById('searchPatientBtn');
+    const patientNombreInput = document.getElementById('patientNombre');
  
  
     doctorForm.style.display = 'none';
@@ -29,7 +29,29 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPatientDni = null;
     let currentDoctorDni = null; // Variable global para almacenar el DNI del doctor
  
- 
+    
+    
+    searchPatientBtn.addEventListener('click', () => {
+        const dni = document.getElementById('patientDni').value;
+
+        fetch(`/get_patient/${dni}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    patientNombreInput.value = data.patient.nombre;
+                    // Además, podrías preseleccionar la especialidad aquí si lo deseas
+                } else {
+                    alert('Paciente no encontrado');
+                    patientNombreInput.value = ''; // Limpiar el campo de nombre si no se encuentra
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching patient:', error);
+                alert('Error al buscar paciente');
+            });
+    });
+
+
     doctorAccessBtn.addEventListener('click', () => {
         doctorForm.style.display = 'flex';
         patientForm.style.display = 'none';
@@ -104,8 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const nombre = document.getElementById('doctorNombre').value;
         const especialidad = document.getElementById('doctorEspecialidad').value;
         const consultorio = document.getElementById('doctorConsultorio').value;
- 
- 
+        
+        
         fetch('/add_doctor', {
             method: 'POST',
             headers: {
@@ -131,8 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dni = document.getElementById('patientDni').value;
         const nombre = document.getElementById('patientNombre').value;
         const especialidad = document.getElementById('patientEspecialidad').value;
- 
- 
+    
         fetch('/add_patient', {
             method: 'POST',
             headers: {
@@ -141,15 +162,22 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({ dni, nombre, especialidad })
         }).then(response => {
             if (response.ok) {
-                alert('Paciente registrado correctamente');
-                document.getElementById('patientDni').value = '';
-                document.getElementById('patientNombre').value = '';
-                document.getElementById('patientEspecialidad').value = '';
+                response.json().then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        document.getElementById('patientDni').value = '';
+                        document.getElementById('patientNombre').value = '';
+                        document.getElementById('patientEspecialidad').value = '';
+                    } else {
+                        alert(data.message);
+                    }
+                });
             } else {
                 alert('Error al registrar paciente');
             }
         });
     });
+    
  
  
     document.getElementById('doctorLoginSubmit').addEventListener('click', () => {

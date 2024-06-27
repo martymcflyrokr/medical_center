@@ -75,26 +75,42 @@ def add_doctor():
    db.session.commit()
    return jsonify({'status': 'success'})
 
-
 @app.route('/add_patient', methods=['POST'])
 def add_patient():
-   data = request.get_json()
-   especialidad = data['especialidad']
-   doctor = Doctor.query.filter_by(especialidad=especialidad).first()
-   if doctor:
-       new_patient = Patient(
-           dni=data['dni'],
-           nombre=data['nombre'],
-           especialidad=especialidad,
-           consultorio=doctor.consultorio,
-           en_fila=True  # Inicializa en_fila en True
+    data = request.get_json()
+    dni = data['dni']
+    nombre = data['nombre']
+    especialidad = data['especialidad']
 
-       )
-       db.session.add(new_patient)
-       db.session.commit()
-       return jsonify({'status': 'success'})
-   else:
-       return jsonify({'status': 'error', 'message': 'No doctor available for this specialty'})
+    # Verificar si el paciente ya está registrado
+    existing_patient = Patient.query.filter_by(dni=dni).first()
+
+    if existing_patient:
+        # Actualizar la especialidad y otros detalles si es necesario
+        existing_patient.especialidad = especialidad
+        existing_patient.en_fila = True  # Asegurar que esté en la fila si se actualiza
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': 'Paciente actualizado correctamente'})
+    else:
+        # Verificar si hay un doctor disponible para la nueva especialidad
+        doctor = Doctor.query.filter_by(especialidad=especialidad).first()
+
+        if doctor:
+            new_patient = Patient(
+                dni=dni,
+                nombre=nombre,
+                especialidad=especialidad,
+                consultorio=doctor.consultorio,
+                en_fila=True  # Inicializa en_fila en True
+            )
+            db.session.add(new_patient)
+            db.session.commit()
+            return jsonify({'status': 'success', 'message': 'Paciente registrado correctamente'})
+        else:
+            return jsonify({'status': 'error', 'message': 'No hay doctor disponible para esta especialidad'})
+
+
+
 
 
 @app.route('/get_specialties', methods=['GET'])
