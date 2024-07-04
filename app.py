@@ -61,7 +61,6 @@ def add_diagnosis():
 def index():
    return render_template('index.html')
 
-
 @app.route('/add_doctor', methods=['POST'])
 def add_doctor():
    data = request.get_json()
@@ -82,17 +81,17 @@ def add_patient():
     nombre = data['nombre']
     especialidad = data['especialidad']
 
-    # Verificar si el paciente ya está registrado
+    # Funcion para Verificar si el paciente ya está registrado
     existing_patient = Patient.query.filter_by(dni=dni).first()
 
     if existing_patient:
-        # Actualizar la especialidad y otros detalles si es necesario
+        # Esta funcionalidad la uso por si el paciente vuelve a atenderse y ya esta registrado en la db.
         existing_patient.especialidad = especialidad
-        existing_patient.en_fila = True  # Asegurar que esté en la fila si se actualiza
+        existing_patient.en_fila = True  # cambio el status a true para que pueda verlo el doc
         db.session.commit()
         return jsonify({'status': 'success', 'message': 'Turno registrado'})
     else:
-        # Verificar si hay un doctor disponible para la nueva especialidad
+        # Verificar si hay un doctor disponible para la nueva especialidad que seleccionó
         doctor = Doctor.query.filter_by(especialidad=especialidad).first()
 
         if doctor:
