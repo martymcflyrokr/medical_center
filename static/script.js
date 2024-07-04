@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     visorGeneral.style.display = 'none';
     logoutBtn.style.display = 'none';
     let currentPatientDni = null;
-    let currentDoctorDni = null; // Variable global para almacenar el DNI del doctor
+    let currentDoctorDni = null; 
  
     
     
@@ -39,10 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 if (data.status === 'success') {
                     patientNombreInput.value = data.patient.nombre;
-                    // Además, podrías preseleccionar la especialidad aquí si lo deseas
                 } else {
                     alert('Paciente no encontrado');
-                    patientNombreInput.value = ''; // Limpiar el campo de nombre si no se encuentra
+                    patientNombreInput.value = ''; 
                 }
             })
             .catch(error => {
@@ -117,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         visorGeneral.style.display = 'none';
         document.getElementById('turnosTableBody').innerHTML = '';
         document.getElementById('visorGeneralBody').innerHTML = '';
-        currentDoctorDni = null; // Limpiar el DNI del doctor al cerrar sesión
+        currentDoctorDni = null;
     });
  
  
@@ -193,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then(response => response.json())
           .then(data => {
               if (data.status === 'success') {
-                  currentDoctorDni = dni; // Guardar el DNI del doctor al iniciar sesión
+                  currentDoctorDni = dni; 
                   showDoctorInterface(data.patients);
                   document.getElementById('loginDni').value = '';
               } else {
@@ -262,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   if (data.status === 'success') {
                       alert('Diagnóstico guardado correctamente');
                       newDiagnosis.value = '';
-                      openHistoryModal(currentPatientDni);  // Refresh the history
+                      openHistoryModal(currentPatientDni); 
                   } else {
                       alert('Error al guardar diagnóstico');
                   }
@@ -278,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    currentPatientDni = dni; // Guardar el DNI del paciente actual
+                    currentPatientDni = dni; 
                     alert('Paciente llamado correctamente');
                     updateVisorGeneral();
                     openHistoryModal(dni);

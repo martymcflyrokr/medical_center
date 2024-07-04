@@ -26,7 +26,7 @@ body {
  
  
  #doctor-form, #patient-form, #doctor-login, #visor {
-    display: none; /* Esto asegura que estén ocultos inicialmente */
+    display: none;
     height: 100vh;
     flex-direction: column;
     align-items: center;
@@ -98,9 +98,9 @@ body {
  
  
  .disabled-btn {
-    background-color: #ccc; /* Color de fondo gris */
-    color: #666; /* Color de texto gris */
-    cursor: not-allowed; /* Cambiar el cursor a 'no permitido' */
+    background-color: #ccc; 
+    color: #666; 
+    cursor: not-allowed; 
  }
  
  
